@@ -36,6 +36,20 @@ namespace SimpleCQRS
         }
     }
 
+    public class InventoryItemNameDecorated : Event
+    {
+        public readonly Guid Id;
+        public readonly string Name;
+        public readonly string Suffix;
+
+        public InventoryItemNameDecorated(Guid id, string name, string suffix)
+        {
+            Id = id;
+            Name = name;
+            Suffix = suffix;
+        }
+    }
+
     public class ItemsCheckedInToInventory : Event
     {
         public Guid Id;

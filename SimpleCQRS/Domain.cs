@@ -25,6 +25,12 @@ namespace SimpleCQRS
             ApplyChange(new InventoryItemRenamed(_id, newName));
         }
 
+        public void DecorateName(string name, string suffix)
+        {
+            if (string.IsNullOrEmpty(suffix)) throw new ArgumentException("suffix");
+            ApplyChange(new InventoryItemNameDecorated(_id, name, suffix));
+        }
+
         public void Remove(int count)
         {
             if (count <= 0) throw new InvalidOperationException("cant remove negative count from inventory");

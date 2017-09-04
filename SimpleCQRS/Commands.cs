@@ -64,4 +64,19 @@ namespace SimpleCQRS
             OriginalVersion = originalVersion;
         }
     }
+
+    public class DecorateNameItem : Command {
+        public Guid InventoryItemId;
+        public readonly string Name;
+        public readonly string Suffix;
+        public readonly int OriginalVersion;
+
+        public DecorateNameItem(Guid inventoryItemId, string name, string suffix, int originalVersion)
+        {
+            InventoryItemId = inventoryItemId;
+            Name = name;
+            Suffix = suffix;
+            OriginalVersion = originalVersion;
+        }
+    }
 }

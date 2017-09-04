@@ -15,13 +15,15 @@ namespace SimpleCQRS
         public string Name;
         public int CurrentCount;
         public int Version;
+        public string Suffix;
 
-        public InventoryItemDetailsDto(Guid id, string name, int currentCount, int version)
+        public InventoryItemDetailsDto(Guid id, string name, int currentCount, int version, string suffix = "")
         {
             Id = id;
             Name = name;
             CurrentCount = currentCount;
             Version = version;
+            Suffix = suffix;
         }
     }
 
@@ -37,7 +39,7 @@ namespace SimpleCQRS
         }
     }
 
-    public class InventoryListView : Handles<InventoryItemCreated>, Handles<InventoryItemRenamed>, Handles<InventoryItemDeactivated>
+    public class InventoryListView : Handles<InventoryItemCreated>, Handles<InventoryItemRenamed>, Handles<InventoryItemDeactivated>, Handles<InventoryItemNameDecorated>
     {
         public void Handle(InventoryItemCreated message)
         {
@@ -50,13 +52,19 @@ namespace SimpleCQRS
             item.Name = message.NewName;
         }
 
+        public void Handle(InventoryItemNameDecorated message)
+        {
+            var item = BullShitDatabase.list.Find(x => x.Id == message.Id);
+            item.Name = message.Name + message.Suffix;
+        }
+
         public void Handle(InventoryItemDeactivated message)
         {
             BullShitDatabase.list.RemoveAll(x => x.Id == message.Id);
         }
     }
 
-    public class InventoryItemDetailView : Handles<InventoryItemCreated>, Handles<InventoryItemDeactivated>, Handles<InventoryItemRenamed>, Handles<ItemsRemovedFromInventory>, Handles<ItemsCheckedInToInventory>
+    public class InventoryItemDetailView : Handles<InventoryItemCreated>, Handles<InventoryItemDeactivated>, Handles<InventoryItemRenamed>, Handles<ItemsRemovedFromInventory>, Handles<ItemsCheckedInToInventory>, Handles<InventoryItemNameDecorated>
     {
         public void Handle(InventoryItemCreated message)
         {
@@ -68,6 +76,12 @@ namespace SimpleCQRS
             InventoryItemDetailsDto d = GetDetailsItem(message.Id);
             d.Name = message.NewName;
             d.Version = message.Version;
+        }
+
+        public void Handle(InventoryItemNameDecorated message)
+        {
+            InventoryItemDetailsDto d = GetDetailsItem(message.Id);
+            d.Name = d.Name + message.Suffix;
         }
 
         private InventoryItemDetailsDto GetDetailsItem(Guid id)

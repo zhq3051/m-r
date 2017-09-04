@@ -41,16 +41,19 @@ namespace CQRSGui
             bus.RegisterHandler<DeactivateInventoryItem>(commands.Handle);
             bus.RegisterHandler<RemoveItemsFromInventory>(commands.Handle);
             bus.RegisterHandler<RenameInventoryItem>(commands.Handle);
+            bus.RegisterHandler<DecorateNameItem>(commands.Handle);
             var detail = new InventoryItemDetailView();
             bus.RegisterHandler<InventoryItemCreated>(detail.Handle);
             bus.RegisterHandler<InventoryItemDeactivated>(detail.Handle);
             bus.RegisterHandler<InventoryItemRenamed>(detail.Handle);
             bus.RegisterHandler<ItemsCheckedInToInventory>(detail.Handle);
             bus.RegisterHandler<ItemsRemovedFromInventory>(detail.Handle);
+            bus.RegisterHandler<InventoryItemNameDecorated>(detail.Handle);
             var list = new InventoryListView();
             bus.RegisterHandler<InventoryItemCreated>(list.Handle);
             bus.RegisterHandler<InventoryItemRenamed>(list.Handle);
             bus.RegisterHandler<InventoryItemDeactivated>(list.Handle);
+            bus.RegisterHandler<InventoryItemNameDecorated>(list.Handle);
             ServiceLocator.Bus = bus;
         }
     }

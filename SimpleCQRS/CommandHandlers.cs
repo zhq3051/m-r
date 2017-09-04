@@ -44,5 +44,12 @@ namespace SimpleCQRS
             item.ChangeName(message.NewName);
             _repository.Save(item, message.OriginalVersion);
         }
+
+        public void Handle(DecorateNameItem message)
+        {
+            var item = _repository.GetById(message.InventoryItemId);
+            item.DecorateName(message.Name, message.Suffix);
+            _repository.Save(item, message.OriginalVersion);
+        }
     }
 }

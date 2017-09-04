@@ -95,5 +95,18 @@ namespace CQRSGui.Controllers
             _bus.Send(new RemoveItemsFromInventory(id, number, version));
             return RedirectToAction("Index");
         }
+
+        public ActionResult DecorateName(Guid id)
+        {
+            ViewData.Model = _readmodel.GetInventoryItemDetails(id);
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult DecorateName(Guid id, string name, string suffix, int version)
+        {
+            _bus.Send(new DecorateNameItem(id, name, suffix, version));
+            return RedirectToAction("Index");
+        }
     }
 }
